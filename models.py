@@ -1,38 +1,44 @@
-from sqlalchemy import Column, Integer, String
-from database import Base
+# Импортируем необходимые модули
+from sqlalchemy import create_engine, Column, Integer, String, Float
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
+# Создаем объект Engine для подключения к базе данных
+engine = create_engine('sqlite:///database.db')
 
+# Создаем базовый класс для моделей
+Base = declarative_base()
+
+# Определяем модель User
 class User(Base):
+    """
+    User model.
+    """
     __tablename__ = 'user'
+    id = Column(Integer, primary_key=True)
+    act_tg_id = Column(Integer, unique=True, nullable=False)
+    act_username = Column(String, nullable=True)
+    act_full_name = Column(String, nullable=True)
 
-    id = Column(Integer,
-                primary_key=True,
-                autoincrement=True)
-    id_user = Column(Integer,
-                     unique=True)
-    tg_username = Column(String,
-                         nullable=True,
-                         default=None)
-    tg_fullname = Column(String,
-                         nullable=True,
-                         default=None)
-
-
+# Определяем модель People
 class People(Base):
+    """
+    People model.
+    """
     __tablename__ = 'people'
+    id = Column(Integer, primary_key=True)
+    act_tg_id = Column(Integer, unique=True, nullable=False)
+    act_full_name = Column(String, nullable=False)
+    act_city = Column(String, nullable=True)
+    act_age = Column(Float, nullable=True, default=None)
+    act_work_experience = Column(String, nullable=True, default=None)
+    act_education = Column(String, nullable=True, default=None)
+    act_skills = Column(String, nullable=True, default=None)
 
-    id = Column(Integer,
-                primary_key=True,
-                autoincrement=True)
-    telegram_user_id = Column(Integer,
-                              unique=True,
-                              nullable=False)
-    full_name = Column(String,
-                       nullable=False)
-    location = Column(String,
-                      nullable=True)
-    photo_id = Column(String,
-                      nullable=True)
+# Создаем таблицы в базе данных
+Base.metadata.create_all(engine)
 
-
-
+# Создаем фабрику сессий
+Session = sessionmaker(bind=engine)
+# Создаем объект сессии
+session = Session()

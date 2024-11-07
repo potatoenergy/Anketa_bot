@@ -1,8 +1,20 @@
+# Импортируем необходимые модули
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.client.bot import DefaultBotProperties
+from aiogram import types
+from config import BOT_TOKEN, ADMINS
 
-from data import config
+# Создаем объект DefaultBotProperties для настройки бота
+default_bot_properties = DefaultBotProperties(parse_mode='HTML')
+# Создаем объект Bot с токеном бота и настройками
+bot = Bot(token=BOT_TOKEN, properties=default_bot_properties)
+# Создаем объект Dispatcher с ботом и хранилищем в памяти
+dp = Dispatcher(bot=bot, storage=MemoryStorage())
 
-bot = Bot(token=config.BOT_TOKEN, parse_mode='HTML')
-
-dp = Dispatcher(storage=MemoryStorage())
+# Определяем функцию для установки команд бота
+async def set_commands():
+    commands = [
+        {"command": "start", "description": "Заполнить/отредактировать анкету"},
+    ]
+    await bot.set_my_commands(commands)
