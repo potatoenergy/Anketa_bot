@@ -15,7 +15,7 @@
 1. Клонируйте репозиторий:
 
 ```
-git clone https://github.com/ChebupelAnfica/Anketa_bot.git
+git clone https://github.com/potatoenergy/Anketa_bot.git
 ```
 
 2. Установите необходимые зависимости:
@@ -62,6 +62,14 @@ class Form(StatesGroup):
     act_new_question = State()
 ```
 
+2. Добавьте новый запрос в файл `states/data_collection.py`:
+
+```python
+class People(Base):
+    ...
+    act_new_question = Column(String, nullable=True, default=None)
+```
+
 2. Добавьте новый обработчик сообщений в файл `handlers/menu.py`:
 
 ```python
@@ -75,4 +83,4 @@ async def process_new_question(message: types.Message, state: FSMContext):
 
 ## Авторство
 
-Этот бот был создан [ChebupelAnfica](https://github.com/ChebupelAnfica) и отредактирован Ponfertato для проекта Potato Energy.
+Этот бот был создан [ChebupelAnfica](https://github.com/ChebupelAnfica) и отредактирован [Ponfertato](https://github.com/ponfertato) для проекта [Potato Energy](https://github.com/potatoenergy).

@@ -15,7 +15,7 @@ Anketa Bot is a Telegram bot that allows users to fill out a questionnaire and s
 1. Clone the repository:
 
 ```
-git clone https://github.com/ChebupelAnfica/Anketa_bot.git
+git clone https://github.com/potatoenergy/Anketa_bot.git
 ```
 
 2. Install the required dependencies:
@@ -62,7 +62,15 @@ class Form(StatesGroup):
     act_new_question = State()
 ```
 
-2. Add a new message handler to the `handlers/menu.py` file:
+2. Add a new query to the `models.py` file:
+
+```python
+class People(Base):
+    ...
+    act_new_question = Column(String, nullable=True, default=None)
+```
+
+3. Add a new message handler to the `handlers/menu.py` file:
 
 ```python
 @dp.message(data_collection.Form.act_new_question)
@@ -75,4 +83,4 @@ async def process_new_question(message: types.Message, state: FSMContext):
 
 ## Credits
 
-This bot was created by [ChebupelAnfica](https://github.com/ChebupelAnfica) and edited by Ponfertato for the Potato Energy project.
+This bot was created by [ChebupelAnfica](https://github.com/ChebupelAnfica) and edited by [Ponfertato](https://github.com/ponfertato) for the [Potato Energy](https://github.com/potatoenergy) project.
