@@ -16,7 +16,7 @@ async def cmd_start(message: types.Message, command: CommandObject):
         await message.answer("XD")
         return
     # Иначе приветствуем пользователя и отправляем ему клавиатуру с основными командами
-    await message.answer(f"{message.from_user.act_full_name}, привет 👋", reply_markup=keyboards.default.main_menu)
+    await message.answer(f"{message.from_user.first_name}, привет 👋", reply_markup=keyboards.default.main_menu)
 
 # Определяем обработчик для сообщений с медиафайлами (фото, видео, документы, видеозаметки)
 @dp.message(F.content_type.in_({'photo', 'video', 'document', 'video_note'}))
