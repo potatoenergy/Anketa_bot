@@ -1,4 +1,6 @@
 # Импортируем необходимые модули
+import re
+
 from aiogram import F, types
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
@@ -11,7 +13,7 @@ from utils import queries
 from utils.notify import notify_admins
 
 
-# Определяем обработчик для callback query с данными "yes" или "no"
+# Обработчик для кнопок "yes" и "no" при повторном заполнении анкеты
 @dp.callback_query(F.data.in_(["yes", "no"]))
 async def handle_repeat_choice(callback_query: types.CallbackQuery,
                                state: FSMContext):
@@ -127,6 +129,66 @@ async def process_education(message: types.Message, state: FSMContext):
 @dp.message(data_collection.Form.act_skills)
 async def process_skills(message: types.Message, state: FSMContext):
     await state.update_data(act_skills=message.text)
+    # Проверяем, есть ли у пользователя Username
+    if message.from_user.username:
+        # Если у пользователя есть Username, предлагаем ему разрешить использовать его для связи
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[[
+            InlineKeyboardButton(text="Да", callback_data="yes_username")
+        ], [
+            InlineKeyboardButton(text="Нет", callback_data="no_username")
+        ]])
+        await message.answer(
+            f"Хотите разрешить использовать ваш Username ({message.from_user.username}) для связи?",
+            reply_markup=keyboard)
+        await state.set_state(data_collection.Form.act_contact)
+    else:
+        # Если у пользователя нет Username, предлагаем ему указать другой способ связи
+        await message.answer("Пожалуйста, укажите удобный способ связи с вами.")
+        await state.set_state(data_collection.Form.act_contact)
+
+# Обработчик для выбора использования Username для связи
+@dp.callback_query(F.data.in_(["yes_username", "no_username"]))
+async def handle_username_choice(callback_query: types.CallbackQuery, state: FSMContext):
+    if callback_query.data == "yes_username":
+        # Если пользователь разрешил использовать свой Username, сохраняем его в состоянии
+        await state.update_data(act_contact=f"https://t.me/{callback_query.from_user.username}")
+        await save_data_and_notify_admins(callback_query, state)
+    else:
+        # Если пользователь не хочет использовать свой Username, предлагаем ему указать другой способ связи
+        await callback_query.message.answer("Пожалуйста, укажите удобный способ связи с вами.")
+    # Удаляем сообщение с кнопками "yes" и "no"
+    await bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
+
+# Обработчик для сбора контактной информации пользователя (сообщение)
+@dp.message(data_collection.Form.act_contact)
+async def process_contact_message(message: types.Message, state: FSMContext):
+    contact_info = message.text
+    if is_valid_url(contact_info) or is_valid_email(contact_info):
+        # Если введенная информация является ссылкой или email, сохраняем ее в состоянии
+        await state.update_data(act_contact=contact_info)
+        await save_data_and_notify_admins(message, state)
+    else:
+        # Если введенная информация не является ссылкой или email, отправляем сообщение об ошибке
+        await message.answer("Пожалуйста, введите корректную ссылку или email.")
+
+# Функция для проверки, является ли строка ссылкой
+def is_valid_url(url):
+    pattern = re.compile(
+        r'^(https?://)?'  # schema
+        r'((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|'  # domain name
+        r'((\d{1,3}\.){3}\d{1,3}))'  # OR ip (v4) address
+        r'(\:\d+)?(\/[-a-z\d%_.~+]*)*'  # port and path
+        r'(\?[;&a-z\d%_.~+=-]*)?'  # query string
+        r'(\#[-a-z\d_]*)?$', re.IGNORECASE)  # fragment locator
+    return bool(pattern.match(url))
+
+# Функция для проверки, является ли строка email
+def is_valid_email(email):
+    pattern = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+    return bool(pattern.match(email))
+
+# Функция для сохранения данных в базу данных и отправки уведомления администраторам
+async def save_data_and_notify_admins(message: types.Message, state: FSMContext):
     # Получаем данные пользователя из состояния
     user_data = await state.get_data()
 
@@ -148,6 +210,7 @@ async def process_skills(message: types.Message, state: FSMContext):
         people.act_work_experience = user_data['act_work_experience']
         people.act_education = user_data['act_education']
         people.act_skills = user_data['act_skills']
+        people.act_contact = user_data['act_contact']
         await session.commit()
 
     # Благодарим пользователя за заполнение анкеты
@@ -163,6 +226,7 @@ async def process_skills(message: types.Message, state: FSMContext):
     notification_message += f"Возраст: {user_data['act_age']}\n"
     notification_message += f"Опыт работы: {user_data['act_work_experience']}\n"
     notification_message += f"Образование: {user_data['act_education']}\n"
-    notification_message += f"Навыки: {user_data['act_skills']}"
+    notification_message += f"Навыки: {user_data['act_skills']}\n"
+    notification_message += f"Контакт: {user_data['act_contact']}"
     # Отправляем сообщение администраторам
     await notify_admins(notification_message)

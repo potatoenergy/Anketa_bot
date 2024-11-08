@@ -18,3 +18,5 @@ class Form(StatesGroup):
     act_education = State()
     # Состояние для вопроса о навыках пользователя
     act_skills = State()
+    # Состояние для вопроса о способах связи
+    act_contact = State()

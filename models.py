@@ -38,6 +38,7 @@ class People(Base):
     act_work_experience = Column(String, nullable=True, default=None)
     act_education = Column(String, nullable=True, default=None)
     act_skills = Column(String, nullable=True, default=None)
+    act_contact = Column(String, nullable=True, default=None)
 
 
 # Создаем таблицы в базе данных
