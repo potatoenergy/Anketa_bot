@@ -9,6 +9,7 @@ engine = create_engine("sqlite:///database.db")
 # Создаем базовый класс для моделей
 Base = declarative_base()
 
+
 # Определяем модель User
 class User(Base):
     """
@@ -20,6 +21,7 @@ class User(Base):
     act_tg_id = Column(Integer, unique=True, nullable=False)
     act_username = Column(String, nullable=True)
     act_full_name = Column(String, nullable=True)
+
 
 # Определяем модель People
 class People(Base):
@@ -36,6 +38,7 @@ class People(Base):
     act_work_experience = Column(String, nullable=True, default=None)
     act_education = Column(String, nullable=True, default=None)
     act_skills = Column(String, nullable=True, default=None)
+
 
 # Создаем таблицы в базе данных
 Base.metadata.create_all(engine)

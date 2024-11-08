@@ -8,6 +8,7 @@ from loader import bot, dp, set_commands
 from middlewares import ThrottlingMiddleware
 from utils.notify import on_startup_notify
 
+
 # Определяем основную функцию
 async def main():
     # Настраиваем маршрутизацию сообщений
@@ -23,18 +24,22 @@ async def main():
     # Начинаем опрос обновлений
     await _start_polling(dp, bot)
 
+
 # Определяем функцию для настройки middleware
 async def _setup_middleware(dp: Dispatcher) -> None:
     dp.message.middleware(ThrottlingMiddleware())
+
 
 # Определяем функцию для создания таблиц в базе данных
 async def _create_tables() -> None:
     await create_tables()
 
+
 # Определяем функцию для начала опроса обновлений
 async def _start_polling(dp: Dispatcher, bot: Bot) -> None:
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
+
 
 # Запускаем основную функцию, если этот скрипт запущен напрямую
 if __name__ == '__main__':

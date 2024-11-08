@@ -4,8 +4,10 @@ from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
 from cachetools import TTLCache
 
+
 # Определяем middleware для ограничения частоты запросов пользователя
 class ThrottlingMiddleware(BaseMiddleware):
+
     def __init__(self, time_limit: int = 1) -> None:
         """
         :param time_limit:
@@ -15,12 +17,9 @@ class ThrottlingMiddleware(BaseMiddleware):
         # Создаем кэш для хранения информации о последних запросах пользователя
         self._limit = TTLCache(maxsize=10_000, ttl=time_limit)
 
-    async def __call__(
-        self,
-        handler: Callable[[Message | CallbackQuery, dict], Awaitable[None]],
-        event: Message | CallbackQuery,
-        data: dict
-    ) -> None:
+    async def __call__(self, handler: Callable[[Message | CallbackQuery, dict],
+                                               Awaitable[None]],
+                       event: Message | CallbackQuery, data: dict) -> None:
         # Если пользователь уже отправлял запрос в течение заданного времени, игнорируем запрос
         if event.from_user.id in self._limit:
             return

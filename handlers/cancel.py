@@ -5,6 +5,7 @@ from aiogram import F, types
 from aiogram.fsm.context import FSMContext
 from loader import bot, dp
 
+
 # Определяем обработчик для callback query с данными "cancel"
 @dp.callback_query(F.data == "cancel")
 async def cancel(call: types.CallbackQuery, state: FSMContext):

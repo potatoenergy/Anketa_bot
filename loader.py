@@ -11,9 +11,13 @@ bot = Bot(token=BOT_TOKEN, properties=default_bot_properties)
 # Создаем объект Dispatcher с ботом и хранилищем в памяти
 dp = Dispatcher(bot=bot, storage=MemoryStorage())
 
+
 # Определяем функцию для установки команд бота
 async def set_commands():
     commands = [
-        {"command": "start", "description": "Заполнить/отредактировать анкету"},
+        {
+            "command": "start",
+            "description": "Заполнить/отредактировать анкету"
+        },
     ]
     await bot.set_my_commands(commands)

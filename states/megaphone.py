@@ -1,6 +1,7 @@
 # Импортируем необходимые модули
 from aiogram.fsm.state import State, StatesGroup
 
+
 # Определяем группу состояний для функции "мегафона"
 class MegaphoneStates(StatesGroup):
     # Состояние для выбора типа текста для отправки в мегафон

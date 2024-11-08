@@ -10,13 +10,16 @@ from states import data_collection
 from utils import queries
 from utils.notify import notify_admins
 
+
 # Определяем обработчик для callback query с данными "yes" или "no"
 @dp.callback_query(F.data.in_(["yes", "no"]))
-async def handle_repeat_choice(callback_query: types.CallbackQuery, state: FSMContext):
+async def handle_repeat_choice(callback_query: types.CallbackQuery,
+                               state: FSMContext):
     message_id = callback_query.message.message_id
     if callback_query.data == "yes":
         # Если пользователь выбрал "yes", спрашиваем его имя
-        await callback_query.message.answer("Давай познакомимся: Как тебя зовут?")
+        await callback_query.message.answer(
+            "Давай познакомимся: Как тебя зовут?")
         await state.set_state(data_collection.Form.act_full_name)
     else:
         # Если пользователь выбрал "no", завершаем опрос
@@ -24,6 +27,7 @@ async def handle_repeat_choice(callback_query: types.CallbackQuery, state: FSMCo
         await state.clear()
     # Удаляем сообщение с кнопками "yes" и "no"
     await bot.delete_message(callback_query.from_user.id, message_id)
+
 
 # Определяем обработчик для сообщения с текстом "Заполнить анкету"
 @dp.message(StateFilter(None), F.text == 'Заполнить анкету')
@@ -33,16 +37,18 @@ async def collect_start(message: types.Message, state: FSMContext):
         people = await queries.get_people(session, message.from_user.id)
         if people is not None:
             # Если пользователь уже заполнял анкету, предлагаем ему заполнить ее снова
-            keyboard = InlineKeyboardMarkup(inline_keyboard=[
-                [InlineKeyboardButton(text="Да", callback_data="yes")],
-                [InlineKeyboardButton(text="Нет", callback_data="no")]
-            ])
-            await message.answer("Вы уже заполнили анкету. Хотите заполнить ее снова?", reply_markup=keyboard)
+            keyboard = InlineKeyboardMarkup(inline_keyboard=[[
+                InlineKeyboardButton(text="Да", callback_data="yes")
+            ], [InlineKeyboardButton(text="Нет", callback_data="no")]])
+            await message.answer(
+                "Вы уже заполнили анкету. Хотите заполнить ее снова?",
+                reply_markup=keyboard)
             await state.set_state(data_collection.Form.repeat)
         else:
             # Если пользователь еще не заполнял анкету, спрашиваем его имя
             await message.answer("Давай познакомимся: Как тебя зовут?")
             await state.set_state(data_collection.Form.act_full_name)
+
 
 # Определяем обработчик для сообщения с текстом "Да" или "Нет" в состоянии "repeat"
 @dp.message(data_collection.Form.repeat)
@@ -56,6 +62,7 @@ async def process_repeat(message: types.Message, state: FSMContext):
         await message.answer("Ок, тогда до свидания!")
         await state.clear()
 
+
 # Определяем обработчик для сообщения с именем пользователя в состоянии "act_full_name"
 @dp.message(data_collection.Form.act_full_name)
 async def process_name(message: types.Message, state: FSMContext):
@@ -65,18 +72,22 @@ async def process_name(message: types.Message, state: FSMContext):
     await message.answer("Введите город")
     await state.set_state(data_collection.Form.act_city)
 
+
 # Определяем обработчик для сообщения с городом пользователя в состоянии "act_city"
 @dp.message(data_collection.Form.act_city)
 async def process_city(message: types.Message, state: FSMContext):
     if message.location:
         # Если пользователь отправил геолокацию, сохраняем ее в состоянии
-        await state.update_data(act_city=f'{message.location.latitude}, {message.location.longitude}')
+        await state.update_data(
+            act_city=f'{message.location.latitude}, {message.location.longitude}'
+        )
     else:
         # Если пользователь отправил текстовое сообщение, сохраняем его в состоянии
         await state.update_data(act_city=message.text)
     # Спрашиваем возраст пользователя
     await message.answer("Введите возраст")
     await state.set_state(data_collection.Form.act_age)
+
 
 # Определяем обработчик для сообщения с возрастом пользователя в состоянии "act_age"
 @dp.message(data_collection.Form.act_age)
@@ -94,7 +105,9 @@ async def process_age(message: types.Message, state: FSMContext):
         await state.set_state(data_collection.Form.act_work_experience)
     except ValueError:
         # Если преобразование не удалось, просим пользователя ввести корректный возраст
-        await message.answer("Пожалуйста, введите корректный возраст (число от 1 до 100)")
+        await message.answer(
+            "Пожалуйста, введите корректный возраст (число от 1 до 100)")
+
 
 # Определяем обработчики для сообщений с опытом работы, образованием и навыками пользователя
 @dp.message(data_collection.Form.act_work_experience)
@@ -103,11 +116,13 @@ async def process_work_experience(message: types.Message, state: FSMContext):
     await message.answer("Введите образование")
     await state.set_state(data_collection.Form.act_education)
 
+
 @dp.message(data_collection.Form.act_education)
 async def process_education(message: types.Message, state: FSMContext):
     await state.update_data(act_education=message.text)
     await message.answer("Введите навыки")
     await state.set_state(data_collection.Form.act_skills)
+
 
 @dp.message(data_collection.Form.act_skills)
 async def process_skills(message: types.Message, state: FSMContext):

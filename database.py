@@ -9,9 +9,11 @@ engine = create_async_engine("sqlite+aiosqlite:///./database.db", echo=True)
 # Создаем фабрику асинхронных сессий
 SessionLocal = async_sessionmaker(bind=engine)
 
+
 # Определяем базовый класс для моделей
 class Base(AsyncAttrs, DeclarativeBase):
     pass
+
 
 # Определяем функцию для создания таблиц в базе данных
 async def create_tables() -> None:
