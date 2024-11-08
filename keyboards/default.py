@@ -1,5 +1,5 @@
 # Импортируем необходимые модули
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
+from aiogram.types import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove
 
 # Создаем клавиатуру с основными командами
 main_menu = ReplyKeyboardMarkup(

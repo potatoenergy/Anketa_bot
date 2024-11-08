@@ -1,15 +1,14 @@
 # Импортируем необходимые модули
-from aiogram import types, F
+from aiogram import F, types
 from aiogram.filters import StateFilter
-from states import data_collection
-from keyboards import default
 from aiogram.fsm.context import FSMContext
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from database import SessionLocal
+from loader import bot, dp
 from models import People
+from states import data_collection
 from utils import queries
-from loader import dp, bot
 from utils.notify import notify_admins
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 # Определяем обработчик для callback query с данными "yes" или "no"
 @dp.callback_query(F.data.in_(["yes", "no"]))

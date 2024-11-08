@@ -1,12 +1,8 @@
 # Импортируем необходимые модули
-import logging
-from aiogram import types, F
-from aiogram.filters import Command, CommandObject
-from keyboards import default
-from utils import queries
-from database import SessionLocal
-from loader import dp, bot
 import keyboards
+from aiogram import F, types
+from aiogram.filters import Command, CommandObject
+from loader import dp
 
 # Определяем обработчик для команды "/start"
 @dp.message(Command("start"))

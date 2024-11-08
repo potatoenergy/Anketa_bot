@@ -1,6 +1,7 @@
 # Импортируем необходимые модули
 import logging
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncAttrs
+
+from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
 # Создаем асинхронный движок базы данных

@@ -1,8 +1,6 @@
 # Импортируем необходимые модули
-import logging
+from models import People
 from sqlalchemy import select
-from models import User, People
-from database import SessionLocal
 
 # Определяем функцию для получения пользователя из базы данных по его ID
 async def get_user(session, tg_user):

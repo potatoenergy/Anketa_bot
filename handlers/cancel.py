@@ -1,8 +1,9 @@
 # Импортируем необходимые модули
 import logging
-from aiogram import types, F
+
+from aiogram import F, types
 from aiogram.fsm.context import FSMContext
-from loader import dp, bot
+from loader import bot, dp
 
 # Определяем обработчик для callback query с данными "cancel"
 @dp.callback_query(F.data == "cancel")

@@ -1,5 +1,5 @@
 # Импортируем необходимые модули
-from aiogram.fsm.state import StatesGroup, State
+from aiogram.fsm.state import State, StatesGroup
 
 # Определяем группу состояний для функции "мегафона"
 class MegaphoneStates(StatesGroup):

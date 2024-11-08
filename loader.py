@@ -1,9 +1,8 @@
 # Импортируем необходимые модули
 from aiogram import Bot, Dispatcher
-from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.client.bot import DefaultBotProperties
-from aiogram import types
-from config import BOT_TOKEN, ADMINS
+from aiogram.fsm.storage.memory import MemoryStorage
+from config import BOT_TOKEN
 
 # Создаем объект DefaultBotProperties для настройки бота
 default_bot_properties = DefaultBotProperties(parse_mode='HTML')

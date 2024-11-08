@@ -1,11 +1,12 @@
 # Импортируем необходимые модули
 import asyncio
-from aiogram import Dispatcher, Bot
+
+from aiogram import Bot, Dispatcher
+from database import create_tables
 from handlers import setup_message_routers
-from loader import dp, bot, set_commands
+from loader import bot, dp, set_commands
 from middlewares import ThrottlingMiddleware
 from utils.notify import on_startup_notify
-from database import create_tables
 
 # Определяем основную функцию
 async def main():

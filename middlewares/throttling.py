@@ -1,7 +1,7 @@
 # Импортируем необходимые модули
-from typing import Callable, Awaitable
+from typing import Awaitable, Callable
 from aiogram import BaseMiddleware
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import CallbackQuery, Message
 from cachetools import TTLCache
 
 # Определяем middleware для ограничения частоты запросов пользователя

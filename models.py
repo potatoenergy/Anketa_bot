@@ -1,10 +1,10 @@
 # Импортируем необходимые модули
-from sqlalchemy import create_engine, Column, Integer, String, Float
+from sqlalchemy import Column, Float, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # Создаем объект Engine для подключения к базе данных
-engine = create_engine('sqlite:///database.db')
+engine = create_engine("sqlite:///database.db")
 
 # Создаем базовый класс для моделей
 Base = declarative_base()
@@ -14,7 +14,8 @@ class User(Base):
     """
     User model.
     """
-    __tablename__ = 'user'
+
+    __tablename__ = "user"
     id = Column(Integer, primary_key=True)
     act_tg_id = Column(Integer, unique=True, nullable=False)
     act_username = Column(String, nullable=True)
@@ -25,7 +26,8 @@ class People(Base):
     """
     People model.
     """
-    __tablename__ = 'people'
+
+    __tablename__ = "people"
     id = Column(Integer, primary_key=True)
     act_tg_id = Column(Integer, unique=True, nullable=False)
     act_full_name = Column(String, nullable=False)

@@ -1,5 +1,5 @@
 # Импортируем необходимые модули
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 # Создаем инлайн-клавиатуру с двумя кнопками
 inline_keyboard_markup = InlineKeyboardMarkup(
