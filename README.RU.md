@@ -70,7 +70,7 @@ class People(Base):
     act_new_question = Column(String, nullable=True, default=None)
 ```
 
-2. Добавьте новый обработчик сообщений в файл `handlers/menu.py`:
+3. Добавьте новый обработчик сообщений в файл `handlers/menu.py`:
 
 ```python
 @dp.message(data_collection.Form.act_new_question)
@@ -79,7 +79,7 @@ async def process_new_question(message: types.Message, state: FSMContext):
     # Добавьте код для обработки ответа пользователя на новый вопрос
 ```
 
-3. Обновите функцию `process_skills` в файле `handlers/menu.py`, чтобы сохранить ответ пользователя на новый вопрос в базе данных и включить его в сообщение уведомления администраторам.
+4. Обновите функцию `process_skills` в файле `handlers/menu.py`, чтобы сохранить ответ пользователя на новый вопрос в базе данных и включить его в сообщение уведомления администраторам.
 
 ## Авторство
 

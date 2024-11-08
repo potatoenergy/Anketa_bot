@@ -79,7 +79,7 @@ async def process_new_question(message: types.Message, state: FSMContext):
     # Add code to handle the user's response to the new question
 ```
 
-3. Update the `process_skills` function in the `handlers/menu.py` file to save the user's response to the new question to the database and include it in the notification message to admins.
+4. Update the `process_skills` function in the `handlers/menu.py` file to save the user's response to the new question to the database and include it in the notification message to admins.
 
 ## Credits
 
